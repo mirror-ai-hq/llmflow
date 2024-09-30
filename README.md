@@ -4,6 +4,17 @@ LLMFlow is a powerful and flexible TypeScript-first library for working with Lan
 ```bash
 npm i @mirror-ai/llmflow
 ```
+
+LLMFlow uses peer dependencies for LLM provider SDKs. Depending on which providers you plan to use, you'll need to install the corresponding SDK:
+
+```bash
+# For OpenAI
+npm install openai
+
+# For Anthropic
+npm install @anthropic-ai/sdk
+```
+
 ### API Key Configuration
 
 LLMFlow uses API keys for OpenAI and Anthropic services. These keys should be set as environment variables:
