@@ -53,3 +53,4 @@ tests/
 # Ignore lock files if using npm or yarn
 package-lock.json
 yarn.lock
+jest-e2e.json
