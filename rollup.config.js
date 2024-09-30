@@ -10,13 +10,22 @@ export default {
       file: "dist/index.js",
       format: "cjs",
       sourcemap: true,
+      inlineDynamicImports: true,
     },
     {
       file: "dist/index.mjs",
       format: "es",
       sourcemap: true,
+      inlineDynamicImports: true,
     },
   ],
-  plugins: [typescript(), nodeResolve(), commonjs(), terser()],
+  plugins: [
+    typescript({
+      tsconfig: "./tsconfig.json",
+    }),
+    nodeResolve(),
+    commonjs(),
+    terser(),
+  ],
   external: ["@anthropic-ai/sdk", "bottleneck", "glob", "minimatch", "openai"],
 };

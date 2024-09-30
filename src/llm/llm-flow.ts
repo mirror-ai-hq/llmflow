@@ -3,8 +3,6 @@ import { resolveLLM } from "./llm-resolver";
 import { ParsingService } from "./common/utils/parsing.service";
 import {
   PromptTemplate,
-  PromptTemplateType,
-  // ValidateTemplate,
   ValidateTemplateVariables,
   createPromptTemplate,
   formatPrompt,
@@ -105,26 +103,36 @@ export class LLMFlow<
   }
 }
 
-function returnLLMFlow<
-  Template extends string,
-  Input extends Record<string, any>
->(
-  template: ValidateTemplateVariables<Template, Input>,
-  options: LLMOptions,
-  versioningOptions?: Partial<VersioningOptions>
-): LLMFlow<Template, Input> {
-  return new LLMFlow<Template, Input>(template, options, versioningOptions);
-}
-
 export function createLLMFlow<Input extends Record<string, any>>() {
   return function <Template extends string>(
     template: ValidateTemplateVariables<Template, Input>,
     options: LLMOptions,
     versioningOptions?: Partial<VersioningOptions>
   ): LLMFlow<Template, Input> {
-    return returnLLMFlow<Template, Input>(template, options, versioningOptions);
+    return new LLMFlow<Template, Input>(template, options, versioningOptions);
   };
 }
+
+// function returnLLMFlow<
+//   Template extends string,
+//   Input extends Record<string, any>
+// >(
+//   template: ValidateTemplateVariables<Template, Input>,
+//   options: LLMOptions,
+//   versioningOptions?: Partial<VersioningOptions>
+// ): LLMFlow<Template, Input> {
+//   return new LLMFlow<Template, Input>(template, options, versioningOptions);
+// }
+
+// export function createLLMFlow<Input extends Record<string, any>>() {
+//   return function <Template extends string>(
+//     template: ValidateTemplateVariables<Template, Input>,
+//     options: LLMOptions,
+//     versioningOptions?: Partial<VersioningOptions>
+//   ): LLMFlow<Template, Input> {
+//     return returnLLMFlow<Template, Input>(template, options, versioningOptions);
+//   };
+// }
 
 // export class LLMFlow<Template extends string, TOutput = string> {
 //   private llmPromise: Promise<LLM>;

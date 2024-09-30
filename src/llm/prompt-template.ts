@@ -15,7 +15,7 @@ export type ValidateTemplateVariables<
       : never // Extra keys in Input not used in Template; cause error
     : never; // Variables in Template not present in Input; cause error
 
-export type PromptTemplateType<Template extends string> = {
+type PromptTemplateType<Template extends string> = {
   [K in ExtractVariables<Template>]: any;
 };
 
