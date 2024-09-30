@@ -4,6 +4,9 @@ node_modules/
 # Output directory
 dist/
 
+# Tests
+tests/
+
 # Environment variable files
 .env
 .env.local

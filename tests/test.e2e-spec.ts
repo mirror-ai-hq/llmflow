@@ -30,6 +30,7 @@ describe("LLMFlow E2E Integration Tests", () => {
   });
 
   it("should execute the LLM flow and format the prompt correctly", async () => {
+    const prompt = "Hello {name}, your balance is {balance}";
     // Use createLLMFlow inline with TypeScript generics and empty object for type validation
     const flow = createLLMFlow<{ name: string; age: number }>()(
       "Hello {{name}}, you are {{age}} years old. Here are your favorite websites.",
