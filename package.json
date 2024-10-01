@@ -1,24 +1,31 @@
 {
   "name": "@mirror-ai/llmflow",
-  "version": "1.0.14",
+  "version": "1.0.28",
   "description": "LLMFlow is a TypeScript-native library for seamless integration, orchestration, and management of Large Language Models (LLMs).",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
     }
   },
+  "files": [
+    "dist"
+  ],
   "private": false,
   "public": true,
   "sideEffects": false,
   "scripts": {
-    "build": "rollup -c",
+    "clean": "rimraf dist",
+    "build:ts": "tsc",
+    "build:rollup": "rollup -c",
+    "build": "npm run clean && npm run build:ts && npm run build:rollup && rimraf dist/temp",
     "test": "jest",
-    "test:e2e": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest-e2e.json"
+    "prepublishOnly": "npm run test && npm run build",
+    "publish": "npm version patch && npm publish"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
@@ -37,6 +44,7 @@
     "jest": "^29.7.0",
     "minimatch": "^3.0.4",
     "openai": "^4.65.0",
+    "rimraf": "^6.0.1",
     "rollup": "^2.79.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"

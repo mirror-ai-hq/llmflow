@@ -1,29 +1,33 @@
-import typescript from "@rollup/plugin-typescript";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import terser from "@rollup/plugin-terser";
 
 export default {
-  input: "src/index.ts",
+  input: "dist/temp/index.js",
   output: [
     {
-      file: "dist/index.js",
+      dir: "dist/cjs",
       format: "cjs",
       sourcemap: true,
-      inlineDynamicImports: true,
+      preserveModules: true,
+      entryFileNames: "[name].js",
+      exports: "named",
     },
     {
-      file: "dist/index.mjs",
+      dir: "dist/esm",
       format: "es",
       sourcemap: true,
-      inlineDynamicImports: true,
+      preserveModules: true,
+      entryFileNames: "[name].mjs",
+      exports: "named",
     },
   ],
   plugins: [
-    typescript({
-      tsconfig: "./tsconfig.json",
+    nodeResolve({
+      moduleDirectories: ["node_modules", "src"],
+      extensions: [".js"],
+      preferBuiltins: true,
     }),
-    nodeResolve(),
     commonjs(),
     terser(),
   ],

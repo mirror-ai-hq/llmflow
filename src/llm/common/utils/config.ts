@@ -16,4 +16,4 @@ export const config: Config = {
   },
 };
 
-export default config;
+export { config as defaultConfig };

@@ -11,7 +11,7 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import * as crypto from "crypto";
 
-interface VersioningOptions {
+export interface VersioningOptions {
   versioningEnabled: boolean;
   storePath: string;
 }

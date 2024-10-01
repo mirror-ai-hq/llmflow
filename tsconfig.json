@@ -2,20 +2,21 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "esnext",
-    "strict": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
+    "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationDir": "./dist/types",
     "rootDir": "./src",
-    "resolveJsonModule": true
+    "outDir": "./dist/temp",
+    "resolveJsonModule": true,
+    "baseUrl": "./src"
   },
   "include": [
-    "src/**/*",
-    "test/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
