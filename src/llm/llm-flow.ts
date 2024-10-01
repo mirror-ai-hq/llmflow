@@ -3,7 +3,7 @@ import { resolveLLM } from "./llm-resolver";
 import { ParsingService } from "./common/utils/parsing.service";
 import {
   PromptTemplate,
-  StrictInputType,
+  InferredInputType,
   createPromptTemplate,
   formatPrompt,
 } from "./prompt-template";
@@ -54,7 +54,7 @@ export class LLMFlow<Template extends string, TOutput = string> {
     }
   }
 
-  async run(input: StrictInputType<Template>): Promise<TOutput> {
+  async run(input: InferredInputType<Template>): Promise<TOutput> {
     const llm = await this.llmPromise;
     const prompt = formatPrompt(this.promptTemplate, input);
     const response = await llm.execute(prompt, this.options);
