@@ -5,7 +5,7 @@ module.exports = {
     "@semantic-release/release-notes-generator", // Generates release notes
     "@semantic-release/changelog", // Updates CHANGELOG.md
     "@semantic-release/npm", // Publishes the package to npm
-    "@semantic-release/github", // Creates a GitHub release
+    "@semantic-release/github",
     [
       "@semantic-release/git",
       {
