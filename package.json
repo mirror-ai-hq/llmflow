@@ -26,6 +26,7 @@
     "build:rollup": "rollup -c",
     "build": "npm run clean && npm run build:ts && npm run build:rollup && rimraf dist/temp",
     "test": "jest",
+    "lint": "eslint . --ext .js,.ts",
     "test:integration": "node test/integration.test.js",
     "prepare": "husky install",
     "prepublishOnly": "npm run test && npm run build",
