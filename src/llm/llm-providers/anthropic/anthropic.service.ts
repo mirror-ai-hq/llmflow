@@ -1,6 +1,7 @@
 import { LLM, LLMOptions } from "../../llm.interface";
 import { Logger, ErrorHandler, CallerDetailsFetcher } from "../../llm-utils";
 import { config } from "../../common/utils/config";
+import { loadModule } from "../../common/utils/module-loader";
 
 export class AnthropicService implements LLM {
   private logger: Logger;
@@ -17,13 +18,26 @@ export class AnthropicService implements LLM {
   private async getAnthropic() {
     if (!this.anthropicInstance) {
       try {
-        const Anthropic = await import("@anthropic-ai/sdk");
-        this.anthropicInstance = new Anthropic.Anthropic({
+        // Use loadModule to dynamically import '@anthropic-ai/sdk'
+        const AnthropicModule = await loadModule("@anthropic-ai/sdk");
+
+        // Access the Anthropic class from the module
+        const AnthropicClass =
+          AnthropicModule.Anthropic || AnthropicModule.default?.Anthropic;
+
+        if (!AnthropicClass) {
+          throw new Error(
+            "Failed to load Anthropic class from module '@anthropic-ai/sdk'"
+          );
+        }
+
+        // Initialize the anthropicInstance with the API key
+        this.anthropicInstance = new AnthropicClass({
           apiKey: config.anthropic.apiKey,
         });
       } catch (error) {
         console.error(
-          "Failed to import Anthropic SDK. Is it installed?",
+          "Anthropic SDK is not available. Please install it as a peer dependency.",
           error
         );
         throw new Error(
@@ -47,20 +61,19 @@ export class AnthropicService implements LLM {
     const startTime = this.logger.logApiCallStart(callerDetails);
 
     try {
-      const response = await anthropic.messages.create({
+      const response = await anthropic.completions.create({
         model: options.model || "claude-3-opus-20240229",
-        messages: messages,
-        max_tokens: options.maxTokens ?? 500,
+        prompt: messages.map((msg) => msg.content).join("\n"),
+        max_tokens_to_sample: options.maxTokens ?? 500,
         temperature: options.temperature,
         top_p: options.topP,
         stop_sequences: options.stopSequences,
       });
 
       const tokenUsage = {
-        prompt_tokens: response.usage.input_tokens,
-        completion_tokens: response.usage.output_tokens,
-        total_tokens:
-          response.usage.input_tokens + response.usage.output_tokens,
+        prompt_tokens: response.total_tokens || 0, // Adjust based on actual response structure
+        completion_tokens: response.completion_tokens || 0,
+        total_tokens: response.total_tokens || 0,
       };
 
       const duration = this.logger.logApiCallComplete(
@@ -70,12 +83,7 @@ export class AnthropicService implements LLM {
         startTime
       );
 
-      let content = "";
-      for (const block of response.content) {
-        if (block.type === "text") {
-          content += block.text;
-        }
-      }
+      const content = response.completion;
 
       this.logger.logTokenUsage(
         messages,

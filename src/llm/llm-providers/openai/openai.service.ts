@@ -1,6 +1,7 @@
 import { LLM, LLMOptions } from "../../llm.interface";
 import { Logger, ErrorHandler, CallerDetailsFetcher } from "../../llm-utils";
 import { config } from "../../common/utils/config";
+import { loadModule } from "../../common/utils/module-loader";
 
 export class OpenAiService implements LLM {
   private logger: Logger;
@@ -17,14 +18,22 @@ export class OpenAiService implements LLM {
   private async getOpenAi() {
     if (!this.openAiInstance) {
       try {
-        const OpenAPI = await import("openai");
-        this.openAiInstance = new OpenAPI.OpenAI({
+        const openaiModule = await loadModule("openai");
+
+        const { Configuration, OpenAIApi } = openaiModule;
+
+        const configuration = new Configuration({
           apiKey: config.openai.apiKey,
         });
+
+        this.openAiInstance = new OpenAIApi(configuration);
       } catch (error) {
-        console.error("Failed to import OpenAI SDK. Is it installed?", error);
+        console.error(
+          "OpenAI SDK is not installed. Please install it as a peer dependency to use OpenAiService.",
+          error
+        );
         throw new Error(
-          "OpenAI SDK is not available. Please install it as a peer dependency."
+          "OpenAI SDK is not installed. Please install it as a peer dependency to use OpenAiService."
         );
       }
     }
