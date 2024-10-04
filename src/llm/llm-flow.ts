@@ -11,6 +11,7 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import * as crypto from "crypto";
 
+// Test Husky and lint-staged
 export interface VersioningOptions {
   versioningEnabled: boolean;
   storePath: string;
